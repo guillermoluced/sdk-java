@@ -1,0 +1,15 @@
+target/
+.idea/
+*.iml
+*.iws
+.DS_Store
+.classpath
+.project
+.settings/
+log/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionBackup
+pom.xml.next
+release.properties
+/bin
