@@ -61,8 +61,8 @@ public class SendAuthorizeRequestData {
 		this.encodingMethod = encodingMethod;
 	}
 	public String getPayload() {
-		String payload = "<Payload>";
-		payload += "<MERCHANT>" + getMerchant() + "</MERCHANT>";
+		String payload = "<Request>";
+		payload += "<NROCOMERCIO>" + getMerchant() + "</NROCOMERCIO>";
 		payload += "<SECURITY>" +  getSecurity() + "</SECURITY>";
 		payload += "<SESSION>" + getSession() + "</SESSION>";
 		payload += "<URL_OK>" + getUrl_ok() + "</URL_OK>";
@@ -87,7 +87,7 @@ public class SendAuthorizeRequestData {
 			payload+= split.getForPayload();
 		}
 		
-		payload+="</Payload>";
+		payload+="</Request>";
 		//System.out.println(payload);
 		return payload;
 	}

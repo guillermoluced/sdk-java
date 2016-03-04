@@ -12,8 +12,8 @@ public abstract class MedioPagoData {
 	}
 	
 	public String getPayload() {
-		String payload = "<Request>";
-		
+//		String payload = "<Request>";
+		String payload = "";
 		for (Map.Entry<String, String> entry : data.entrySet()) {
 			payload += "<";
 			payload += entry.getKey().toUpperCase();
@@ -26,7 +26,7 @@ public abstract class MedioPagoData {
 			payload += ">";
 		}
 		
-		payload+="</Request>";
+//		payload+="</Request>";
 		return payload;
 	}
 }

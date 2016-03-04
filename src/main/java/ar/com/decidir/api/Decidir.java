@@ -29,7 +29,7 @@ import ar.com.decidir.api.operation.service.Operations;
 
 public class Decidir {
 
-	public static final String version= "0.0.1";
+	public static final String version= "0.1.0";
 	
 	private AuthorizeConnector auth;
 	private OperationConnector op;
@@ -63,11 +63,12 @@ public class Decidir {
 			this.endpoint=sdb;
 			break;
 		}
+		this.headers = auth;
 	}
 	
 	//Authorize Service
 	public void initAuthorize (String wsdl) throws MalformedURLException{
-		auth = new AuthorizeConnector(wsdl, this.endpoint, headers);
+		auth = new AuthorizeConnector(wsdl, this.endpoint+"Authorize", headers);
 	}
 	public SendAuthorizeRequestResponse sendAuthorizeRequest(SendAuthorizeRequestData sar){
 		return auth.sendAuthorizeRequest(sar);
@@ -78,12 +79,10 @@ public class Decidir {
 	public ExecuteResponse execute(ExecuteData ex){
 		return auth.execute(ex);
 	}
-	
-
 
 	//Operation Service
 	public void initOperation(String wsdl) throws MalformedURLException{
-		op = new OperationConnector(wsdl, this.endpoint, headers);
+		op = new OperationConnector(wsdl, this.endpoint + "Operation", headers);
 	}
 	public Operations get(GetData data) throws DataServiceFault{
 		return op.get(data);

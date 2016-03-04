@@ -22,15 +22,15 @@ import ar.com.decidir.api.operation.service.Operation;
 import ar.com.decidir.api.operation.service.Operations;
 
 public class Test {
+	//REEMPLAZAR POR EL ANSWER QUE DEVUELVE EL FORMULARIO
+	private static final String ANSWER_KEY = "asdasdasd-asdas-asdasda";
 
 	static Decidir decidir;
 	
 	static String CURRENCYCODE = "032";
-	static String MERCHANT = "22067736";
+	static String MERCHANT = "00060116";
 	static String ENCODINGMETHOD = "XML";
-	static String SECURITY = "RV82RVHO5T0O5CZUUTX2FLHU";
-
-	
+	static String SECURITY = "SM9X1O1MJ0CLPL3T8TWNFA4M";
 	
 	public static void main(String[] args){
 		
@@ -49,8 +49,8 @@ public class Test {
 	//HttpHeaders
 	private static Map<String, List<String>> getHeaders() {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
-		parameters.put("Authorization", Collections.singletonList("PRISMA RV82RVHO5T0O5CZUUTX2FLHU"));
-		parameters.put("user_agent", Collections.singletonList("PHPSoapClient"));
+		parameters.put("Authorization", Collections.singletonList("PRISMA SM9X1O1MJ0CLPL3T8TWNFA4M"));
+		//parameters.put("user_agent", Collections.singletonList("PHPSoapClient"));
 		//include all aditional Http headers to map, all of them will be used
 		return parameters;
 	}
@@ -66,7 +66,7 @@ public class Test {
 			printSendAuthorizeRequestResponse(sarResponse);
 			
 			//GetAuthorizeAnswer
-			GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData());
+			GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData(sarResponse.getRequestKey().getValue()));
 			printGetAuthorizeAnswerResponse(gaaResponse);
 			
 			//Execute
@@ -100,19 +100,26 @@ public class Test {
 
 	private static void printSendAuthorizeRequestResponse(SendAuthorizeRequestResponse sarResponse) {
 		System.out.println("Status Code: " + sarResponse.getStatusCode());
-		System.out.println("StatusMessage: " + sarResponse.getStatusMessage());
-		System.out.println("PublicRequestKey: " + sarResponse.getPublicRequestKey());
-		System.out.println("RequestKey: " + sarResponse.getRequestKey());
-		System.out.println("URLRequest: " + sarResponse.getURLRequest());
+		System.out.println("StatusMessage: " + sarResponse.getStatusMessage().getValue());
+		if(sarResponse.getPublicRequestKey()!=null){
+			System.out.println("PublicRequestKey: " + sarResponse.getPublicRequestKey().getValue());
+		}
+		if(sarResponse.getRequestKey()!=null){
+			System.out.println("RequestKey: " + sarResponse.getRequestKey().getValue());
+		}
+		if(sarResponse.getURLRequest()!=null){
+			System.out.println("URLRequest: " + sarResponse.getURLRequest().getValue());
+		}
 	}
 	
 	
-	private static GetAuthorizeAnswerData initGetAuthorizeAnswerData() {
+	private static GetAuthorizeAnswerData initGetAuthorizeAnswerData(String requeskKey) {
 		GetAuthorizeAnswerData gaa = new GetAuthorizeAnswerData();
 		gaa.setMerchant(MERCHANT);
 		gaa.setSecurity(SECURITY);
-		gaa.setRequestKey("cdf96aaf-dd1c-195b-eeee-130a3df96110");
-		gaa.setAnswerKey("77215fe6-f9d5-f1c2-372b-c0065e0c4429");
+		gaa.setRequestKey(requeskKey);
+		
+		gaa.setAnswerKey(ANSWER_KEY);
 		return gaa;
 	}
 	private static void printGetAuthorizeAnswerResponse(GetAuthorizeAnswerResponse gaaResponse) {
