@@ -10,6 +10,7 @@ public class SendAuthorizeRequestData {
 	
 	String security="";
 	String session="";
+	String monto="";
 	String merchant="";
 	String url_ok="";
 	String url_error="";
@@ -23,7 +24,13 @@ public class SendAuthorizeRequestData {
 	ComerciosAgregadores comercios;
 	
 	Split split;
-	
+
+	public String getMonto() {
+		return monto;
+	}
+	public void setMonto(String monto) {
+		this.monto = monto;
+	}
 	public String getSecurity() {
 		return security;
 	}
@@ -68,7 +75,7 @@ public class SendAuthorizeRequestData {
 		payload += "<URL_OK>" + getUrl_ok() + "</URL_OK>";
 		payload += "<URL_ERROR>" + getUrl_error() + "</URL_ERROR>";
 		payload += "<ENCODINGMETHOD>" + getEncodingMethod() + "</ENCODINGMETHOD>";
-
+		payload += "<MONTO>"+getMonto()+"</MONTO>";
 		if(data!=null){
 			payload += data.getForPayload();
 		}

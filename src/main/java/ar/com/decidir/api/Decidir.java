@@ -29,7 +29,7 @@ import ar.com.decidir.api.operation.service.Operations;
 
 public class Decidir {
 
-	public static final String version= "0.1.0";
+	public static final String version= "0.1.1";
 	
 	private AuthorizeConnector auth;
 	private OperationConnector op;

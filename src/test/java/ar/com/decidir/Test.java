@@ -25,8 +25,10 @@ public class Test {
 	//REEMPLAZAR POR EL ANSWER QUE DEVUELVE EL FORMULARIO
 	private static final String ANSWER_KEY = "asdasdasd-asdas-asdasda";
 
+
 	static Decidir decidir;
 	
+	static final String MONTO = "205";
 	static String CURRENCYCODE = "032";
 	static String MERCHANT = "00060116";
 	static String ENCODINGMETHOD = "XML";
@@ -88,6 +90,7 @@ public class Test {
 		sar.setEncodingMethod(ENCODINGMETHOD);
 		sar.setMerchant(MERCHANT);
 		sar.setSecurity(SECURITY);
+		sar.setMonto(MONTO);
 		sar.setUrl_error("http://someurl.com/error/");
 		sar.setUrl_ok("http://someurl.com/ok/");
 		
