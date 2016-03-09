@@ -24,6 +24,7 @@ public class SendAuthorizeRequestData {
 	ComerciosAgregadores comercios;
 	
 	Split split;
+	private String numeroOperacion;
 
 	public String getMonto() {
 		return monto;
@@ -71,6 +72,7 @@ public class SendAuthorizeRequestData {
 		String payload = "<Request>";
 		payload += "<NROCOMERCIO>" + getMerchant() + "</NROCOMERCIO>";
 		payload += "<SECURITY>" +  getSecurity() + "</SECURITY>";
+		payload += "<NROOPERACION>" +  getNumeroOperacion() + "</NROOPERACION>";
 		payload += "<SESSION>" + getSession() + "</SESSION>";
 		payload += "<URL_OK>" + getUrl_ok() + "</URL_OK>";
 		payload += "<URL_ERROR>" + getUrl_error() + "</URL_ERROR>";
@@ -100,6 +102,9 @@ public class SendAuthorizeRequestData {
 	}
 	
 	
+	private String getNumeroOperacion() {
+		return this.numeroOperacion;
+	}
 	//Fraud Control
 	public FraudControlData getFraudControlData() {
 		return data;
@@ -124,6 +129,9 @@ public class SendAuthorizeRequestData {
 	
 	public void setSplit(Split split){
 		this.split = split;
+	}
+	public void setNumeroOperacion(String numeroOperacion) {
+		this.numeroOperacion = numeroOperacion;
 	}
 
 }

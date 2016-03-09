@@ -33,6 +33,7 @@ public class Test {
 	static String MERCHANT = "00060116";
 	static String ENCODINGMETHOD = "XML";
 	static String SECURITY = "SM9X1O1MJ0CLPL3T8TWNFA4M";
+	static String NRO_OPERACION = "001";
 	
 	public static void main(String[] args){
 		
@@ -90,6 +91,7 @@ public class Test {
 		sar.setEncodingMethod(ENCODINGMETHOD);
 		sar.setMerchant(MERCHANT);
 		sar.setSecurity(SECURITY);
+		sar.setNumeroOperacion(NRO_OPERACION);
 		sar.setMonto(MONTO);
 		sar.setUrl_error("http://someurl.com/error/");
 		sar.setUrl_ok("http://someurl.com/ok/");
