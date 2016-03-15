@@ -23,16 +23,16 @@ import ar.com.decidir.api.operation.service.Operations;
 
 public class Test {
 	//REEMPLAZAR POR EL ANSWER QUE DEVUELVE EL FORMULARIO
-	private static final String ANSWER_KEY = "asdasdasd-asdas-asdasda";
+	private static final String ANSWER_KEY = "aaaaa-aaaaa-aaaaa-aaaa";
 
 
 	static Decidir decidir;
 	
 	static final String MONTO = "205";
 	static String CURRENCYCODE = "032";
-	static String MERCHANT = "00060116";
+	static String MERCHANT = "23423423";
 	static String ENCODINGMETHOD = "XML";
-	static String SECURITY = "SM9X1O1MJ0CLPL3T8TWNFA4M";
+	static String SECURITY = "asdsystyrthfghfgh";
 	static String NRO_OPERACION = "001";
 	
 	public static void main(String[] args){
@@ -52,7 +52,7 @@ public class Test {
 	//HttpHeaders
 	private static Map<String, List<String>> getHeaders() {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
-		parameters.put("Authorization", Collections.singletonList("PRISMA SM9X1O1MJ0CLPL3T8TWNFA4M"));
+		parameters.put("Authorization", Collections.singletonList("PRISMA " +SECURITY));
 		//parameters.put("user_agent", Collections.singletonList("PHPSoapClient"));
 		//include all aditional Http headers to map, all of them will be used
 		return parameters;
@@ -69,7 +69,7 @@ public class Test {
 			printSendAuthorizeRequestResponse(sarResponse);
 			
 			//GetAuthorizeAnswer
-			GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData(sarResponse.getRequestKey().getValue()));
+			GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData("595664a7-3341-78e1-fc66-f7ce90f77c0c"));
 			printGetAuthorizeAnswerResponse(gaaResponse);
 			
 			//Execute
@@ -129,10 +129,17 @@ public class Test {
 	}
 	private static void printGetAuthorizeAnswerResponse(GetAuthorizeAnswerResponse gaaResponse) {
 		System.out.println("Status Code: " + gaaResponse.getStatusCode());
-		System.out.println("AuthorizationKey: " + gaaResponse.getAuthorizationKey());
-		System.out.println("EncodingMethod: " + gaaResponse.getEncodingMethod());
-		System.out.println("StatusMessage: " + gaaResponse.getStatusMessage());
-		System.out.println("Payload: " + gaaResponse.getPayload());
+		System.out.println("AuthorizationKey: " + gaaResponse.getAuthorizationKey().getValue());
+		System.out.println("EncodingMethod: " + gaaResponse.getEncodingMethod().getValue());
+		System.out.println("StatusMessage: " + gaaResponse.getStatusMessage().getValue());
+		System.out.println("Payload: ");
+		Map<String, Map<String, String>> payload =  decidir.getPayload(gaaResponse.getPayload());
+		for (Map.Entry<String, Map<String, String>> ele1 : payload.entrySet()) {
+			System.out.println(ele1.getKey() + ": ");
+			for(Map.Entry<String, String> value: ele1.getValue().entrySet()){
+				System.out.println(value.getKey() + ": " + value.getValue());
+			}
+		}
 	}
 	
 	private static ExecuteData initExecuteData() {
