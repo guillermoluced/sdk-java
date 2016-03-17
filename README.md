@@ -506,9 +506,15 @@ El mismo devolverá una instalcia de la clase `GetAuthorizeAnswerResponse`
 	System.out.println("AuthorizationKey: " + gaaResponse.getAuthorizationKey()); // Authorization Key
 	System.out.println("EncodingMethod: " + gaaResponse.getEncodingMethod());
 	System.out.println("StatusMessage: " + gaaResponse.getStatusMessage()); // Mensaje del estado del requerimiento
-	System.out.println("Payload: " + gaaResponse.getPayload()); // Map <clave, valor> con información adicional.
-	
+	Map<String, Map<String, String>> payload =  decidir.getPayload(gaaResponse.getPayload()); // Map<String, Map<String,String>> con información adicional.
+	for (Map.Entry<String, Map<String, String>> ele1 : payload.entrySet()) {
+		System.out.println(ele1.getKey() + ": ");
+		for(Map.Entry<String, String> value: ele1.getValue().entrySet()){
+			System.out.println(value.getKey() + ": " + value.getValue());
+		}
+	}
 ```
+_Observación:_ Debido a que la propiedad payload se trata de un objeto __JAXBElement<String>__, la SDK provee el método __getPayload()__ para parsearlo a un __Map<String, Map<String,String>>__.
 
 [Volver al inicio](#decidir-sdk-java)
 
