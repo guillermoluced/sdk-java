@@ -30,9 +30,9 @@ public class Test {
 	
 	static final String MONTO = "205";
 	static String CURRENCYCODE = "032";
-	static String MERCHANT = "23423423";
+	static String MERCHANT = "00110516";
 	static String ENCODINGMETHOD = "XML";
-	static String SECURITY = "asdsystyrthfghfgh";
+	static String SECURITY = "Z5ZV9INFL55IYGF6K6YMLJKJ";
 	static String NRO_OPERACION = "001";
 	
 	public static void main(String[] args){
@@ -62,7 +62,8 @@ public class Test {
 	
 	private static void authorizeSample() {
 		try {
-			decidir.initAuthorize("file:D:/Authorize.wsdl");
+			
+			decidir.initAuthorize("file:/home/damianwajser/git/Decidir/dev/sdk/dev-sdk-java/resources/Authorize.wsdl");
 			
 			//SendAuthorizeRequest
 			SendAuthorizeRequestResponse sarResponse = decidir.sendAuthorizeRequest(initSendAuthorizeRequestData());
