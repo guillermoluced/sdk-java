@@ -21,4 +21,7 @@ public class TarjetaCredito extends MedioPagoData{
 	public void setBIN (String BIN){
 		data.put("BIN", BIN);
 	}
+	public void setIDPLAN (String IDPLAN){
+		data.put("IDPLAN", IDPLAN);
+	}
 }

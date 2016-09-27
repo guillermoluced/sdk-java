@@ -34,6 +34,7 @@ public class Test {
 	static String ENCODINGMETHOD = "XML";
 	static String SECURITY = "Z5ZV9INFL55IYGF6K6YMLJKJ";
 	static String NRO_OPERACION = "001";
+	static String NUMERO_COMERCIO = "";
 	
 	public static void main(String[] args){
 		
@@ -62,8 +63,7 @@ public class Test {
 	
 	private static void authorizeSample() {
 		try {
-			
-			decidir.initAuthorize("file:/home/damianwajser/git/Decidir/dev/sdk/dev-sdk-java/resources/Authorize.wsdl");
+			decidir.initAuthorize("file:"+System.getProperty("user.dir")+"/resources/Authorize.wsdl");
 			
 			//SendAuthorizeRequest
 			SendAuthorizeRequestResponse sarResponse = decidir.sendAuthorizeRequest(initSendAuthorizeRequestData());
@@ -96,6 +96,7 @@ public class Test {
 		sar.setMonto(MONTO);
 		sar.setUrl_error("http://someurl.com/error/");
 		sar.setUrl_ok("http://someurl.com/ok/");
+		sar.setNumeroComercio(NUMERO_COMERCIO);
 		
 		MedioPagoData medioDePago = new TarjetaCredito("1", "6");
 		

@@ -23,7 +23,7 @@ Modulo para conexión con gateway de pago DECIDIR
     * [Split de Transacciones](#split-de-transacciones)
       * [Monto Fijo](#monto-fijo)
       * [Porcentaje](#porcentaje)	  
-  * [GetAuthorizeAnswer] (#getauthorizeanswer) 
+  * [GetAuthorizeAnswer] (#getauthorizeanswer)
   * [Execute](#execute)
     * [Anulación](#anulación)
     * [Devolución Total](#devolución-total)
@@ -33,8 +33,8 @@ Modulo para conexión con gateway de pago DECIDIR
     * [Códigos de Medios de Pago](#códigos-de-medios-de-pago)
     * [Códigos de Estado](#códigos-de-estado)
     * [Provincias](#provincias)
- 
- 
+
+
 ## Instalación
 Se debe descargar la última versión del SDK desde el botón Download ZIP, branch master.		
 Una vez descargado y descomprimido, debe incluirse al proyecto.		
@@ -54,19 +54,19 @@ Instanciación de la clase 'Decidir'
 La misma recibe como parámetros el Header HTTP provisto por Decidir para el comercio y un numero entero que representa el Endpoint en el que se realizaran las operaciones.
 
 ```java
-	
+
 		int endpoint = Decidir.sandbox;//Developer sandbox
 		//int endpoint = Decidir.production; //produccion
 		decidir = new Decidir(endpoint, getHeaders());
 	}
-	
+
 	private static Map<String, List<String>> getHeaders() {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
 		parameters.put("Authorization", Collections.singletonList("PRISMA RV82RVHO5T0O5CZUUTX2FLHU"));
 		//include all aditional Http headers to map, all of them will be used
 		return parameters;
 	}
-		
+
 ```
 
 [Volver al inicio](#decidir-sdk-java)
@@ -81,19 +81,23 @@ Primero se debe inicializar el conector pasando como parametro la ubicación del
 Luego Crear los datos a enviar:
 ```java
 	private static SendAuthorizeRequestData initSendAuthorizeRequestData() {
-		
+
 		SendAuthorizeRequestData sar = new SendAuthorizeRequestData();
-		
+
 		sar.setEncodingMethod(ENCODINGMETHOD);
 		sar.setMerchant(MERCHANT);
 		sar.setSecurity(SECURITY);
 		sar.setUrl_error("http://someurl.com/error/");
 		sar.setUrl_ok("http://someurl.com/ok/");
-		
+
 		return sar;
 	}
 ```
 
+En algunas integraciones será necesario enviar un _NROCOMERCIO_ distinto al  merchant, para esos casos se debe emplear el método  _setNumeroComercio()_ agregando la siguiente lineaal código anterior:
+```java
+    sar.setNumeroComercio(NRO_COMERCIO);
+ ```
 Luego se debe invocar al servicio pasándole como parámetro el objeto anteriormente creado
 
 ```java
@@ -135,7 +139,7 @@ Luego se debe incluir la información del medio de pago en el objeto de datos
 
 ```java
 	sar.setMedioPago(medioDePago);
-		
+
 ```
 
 [Volver al inicio](#decidir-sdk-java)
@@ -152,7 +156,7 @@ Para utilizar Rapipago como medio de pago, se debe instanciar un objeto de la cl
 											, "1601010" /*Mandatorio. Fecha de vencimiento para el pago del cupón. Formato AAMMDD*/
 											, "12345678"/*Mandatorio. Código de cliente provisto por Rapipago al momento de habilitar el comercio.*/
 											);
-									
+
 ```
 
 Luego se debe incluir la información del medio de pago en el objeto de datos
@@ -212,7 +216,7 @@ Los parámetros comunes a todas las verticales deben enviarse junto con los dato
 	fcd.add(FraudControlData.CSBTPOSTALCODE, "1010"); //Código Postal de la dirección de facturación. MANDATORIO.
 	fcd.add(FraudControlData.CSBTSTATE, "B"); //Provincia de la dirección de facturación. MANDATORIO. Ver tabla anexa de provincias.
 	fcd.add(FraudControlData.CSBTSTREET1, "Cerrito 740"); //Domicilio de facturación (calle y nro). MANDATORIO.
-	fcd.add(FraudControlData.CSBTSTREET2, "Piso 8"); //Complemento del domicilio. (piso, departamento). NO MANDATORIO. 
+	fcd.add(FraudControlData.CSBTSTREET2, "Piso 8"); //Complemento del domicilio. (piso, departamento). NO MANDATORIO.
 	fcd.add(FraudControlData.CSPTCURRENCY, "ARS"); ////Moneda. MANDATORIO.
 	fcd.add(FraudControlData.CSPTGRANDTOTALAMOUNT, "125.38"); //Con decimales opcional usando el puntos como separador de decimales. No se permiten comas, ni como separador de miles ni como separador de decimales. MANDATORIO. (Ejemplos:$125,38-> 125.38 $12-> 12 o 12.00)
 	fcd.add(FraudControlData.device_fingerprint, "dj94utjg93"); // Device Fingerprint Id. MANDATORIO.
@@ -234,7 +238,7 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Ret
 ```java
 
 	FraudControlRetail fc = new FraudControlRetail();
-		
+
 	fc.add(FraudControlRetail.CSSTCITY, "Rosario"); //Ciudad de envío de la orden. MANDATORIO
 	fc.add(FraudControlRetail.CSSTCOUNTRY, "AR"); //País de envío de la orden. MANDATORIO.
 	fc.add(FraudControlRetail.CSSTEMAIL, "mail@someurl.com"); //Mail del destinatario, MANDATORIO.
@@ -245,13 +249,13 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Ret
 	fc.add(FraudControlRetail.CSSTSTATE, "D"); //Provincia de envío. MANDATORIO. Son de 1 caracter
 	fc.add(FraudControlRetail.CSSTSTREET1, "San Martin 123"); //Domicilio de envío. MANDATORIO.
 	fc.add(FraudControlRetail.CSSTSTREET2, "San Luis"); //Localidad de envío. NO MANDATORIO.
-	
+
 	fc.add(FraudControlRetail.CSMDD12, value); //Shipping DeadLine (Num Dias). NO MADATORIO.
 	fc.add(FraudControlRetail.CSMDD13, value); //Método de Despacho. NO MANDATORIO.
 	fc.add(FraudControlRetail.CSMDD14, value); //Customer requires Tax Bill ? (Y/N). NO MANDATORIO.
 	fc.add(FraudControlRetail.CSMDD15, value); //Customer Loyality Number. NO MANDATORIO.
 	fc.add(FraudControlRetail.CSMDD16, value); //Promotional / Coupon Code. NO MANDATORIO.
-	
+
 	fc.add(FraudControlRetail.CSITPRODUCTCODE, "electronic_good"); //Código de producto. MANDATORIO. Valores posibles(adult_content;coupon;default;electronic_good;electronic_software;gift_certificate;handling_only;service;shipping_and_handling;shipping_only;subscription)
 	fc.add(FraudControlRetail.CSITPRODUCTDESCRIPTION, "Some Product Description"); //Descripción del producto. MANDATORIO.
 	fc.add(FraudControlRetail.CSITPRODUCTNAME, "Product Name"); //Nombre del producto. MANDATORIO.
@@ -259,8 +263,8 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Ret
 	fc.add(FraudControlRetail.CSITQUANTITY, "1"); //Cantidad del producto. MANDATORIO.
 	fc.add(FraudControlRetail.CSITTOTALAMOUNT, "120.00"); //CSITTOTALAMOUNT=CSITUNITPRICE*CSITQUANTITY "999999[.CC]" Con decimales opcional usando el puntos como separador de decimales. No se permiten comas, ni como separador de miles ni como separador de decimales. MANDATORIO.
 	fc.add(FraudControlRetail.CSITUNITPRICE, "120.00"); //Formato Idem CSITTOTALAMOUNT. MANDATORIO
-	
-		
+
+
 ```
 
 Para incorporar estos datos en el requerimiento inicial:
@@ -279,13 +283,13 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Tra
 	fc.add(FraudControlTravel.CSADNUMBEROFPASSENGERS, "4"); //Cantidad total de pasajeros. MANDATORIO.
 	fc.add(FraudControlTravel.CSDMCOMPLETEROUTE, "JFK-SFO:SFO-LAX"); //Ruta completa del viaje, ORIG1-DEST1[:ORIG2-DEST2...:ORIGn-DESTn]. MANDATORIO.
 	fc.add(FraudControlTravel.CSDMDEPARTUREDATETIME, "2011-03-20 11:30pm GMT"); /* Fecha y hora del primer tramo del viaje. Utilizar GMT.
-									Formato: yyyy-MM-dd hh:mma z donde: 
+									Formato: yyyy-MM-dd hh:mma z donde:
 									hh = hora en formato 12-horas
 									a = am o pm
 									z = huso horario del vuelo de salida. Por ejemplo: Si la compaÃ±ía tiene su sede en la ciudad de A, pero el vuelo sale de la ciudad B, z es el horario de la ciudad B al momento de la salida
 									MANDATORIO */
 	fc.add(FraudControlTravel.CSDMJOURNEYTYPEY, "round trip"); //Tipo de viaje. valores posibles: round trip o one way. MANDATORIO.
-	
+
 	fc.add(FraudControlTravel.CSMDD17, "AWHWNV"); //Código de Reserva (PNR). MANDATORIO.
 	fc.add(FraudControlTravel.CSMDD18, "N"); //3rd Party Booking? (Y/N). MANDATORIO.
 	fc.add(FraudControlTravel.CSMDD19, value); //Departure City. NO MANDATORIO.
@@ -297,11 +301,11 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Tra
 	fc.add(FraudControlTravel.CSMDD25, value); //Week of year of Flight. NO MANDATORIO.
 	fc.add(FraudControlTravel.CSMDD26, value); //Airline Code. NO MANDATORIO.
 	fc.add(FraudControlTravel.CSMDD27, value); //Code Share. NO MANDATORIO.
-	
+
 	fc.add(FraudControlTravel.CSITPASSENGEREMAIL, "jperez@hotmail.com"); //Email del pasajero. MANDATORIO
 	fc.add(FraudControlTravel.CSITPASSENGERFIRSTNAME, "Jose"); //Nombre del pasajero. MANDATORIO.
 	fc.add(FraudControlTravel.CSITPASSENGERLASTNAME, "Perez"); //Apellido del pasajero. MANDATORIO.
-	fc.add(FraudControlTravel.CSITPASSENGERID, "21457547"); //Número de pasaporte. NO MANDATORIO.	
+	fc.add(FraudControlTravel.CSITPASSENGERID, "21457547"); //Número de pasaporte. NO MANDATORIO.
 	fc.add(FraudControlTravel.CSITPASSENGERPHONE, "541160913988"); //Número de teléfono del pasajero. MANDATORIO.
 	fc.add(FraudControlTravel.CSITPASSENGERSTATUS, "gold"); //Clasificación del pasajero dentro de la empresa. MANDATORIO.
 	fc.add(FraudControlTravel.CSITPASSENGERTYPE, "INF"); //Tipo de pasajero asociado al precio del pasaje. MANDATORIO.(ADT: Adult,CNN: Child,INF: Infant,YTH: Youth,STU: Student,SCR: Senior Citizen,MIL: Military)
@@ -323,10 +327,10 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Tic
 ```java
 
 	FraudControlTicketing fc = new FraudControlTicketing();
-	
+
 	fc.add(FraudControlTicketing.CSMDD33, "15"); //Número de días en los que se desarrollara el evento. MANDATORIO
 	fc.add(FraudControlTicketing.CSMDD34, "Email"); //Tipo de envío. MANDATORIO. Valores posibles: Pick up, Email, Smartphone, Other
-	
+
 	fc.add(FraudControlTicketing.CSITPRODUCTCODE, "electronic_good"); //Código de producto. MANDATORIO. Valores posibles(adult_content;coupon;default;electronic_good;electronic_software;gift_certificate;handling_only;service;shipping_and_handling;shipping_only;subscription)
 	fc.add(FraudControlTicketing.CSITPRODUCTDESCRIPTION, "Product Description"); //Descripción del producto. MANDATORIO.
 	fc.add(FraudControlTicketing.CSITPRODUCTNAME, "Product Name"); //Nombre del producto. MANDATORIO.
@@ -350,13 +354,13 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Ser
 
 ```java
 	FraudControlServicios fc = new FraudControlServicios();
-	
+
 	fc.add(FraudControlServicios.CSMDD28, "Gas"); //Tipo de Servicio. MANDATORIO. Valores posibles: Luz, Gas, Telefono, Agua, TV, Cable, Internet, Impuestos.
 	fc.add(FraudControlServicios.CSMDD29, value); //Referencia de pago del servicio 1. NO MANDATORIO.
 	fc.add(FraudControlServicios.CSMDD30, value); //Referencia de pago del servicio 2. NO MANDATORIO.
 	fc.add(FraudControlServicios.CSMDD31, value); //Referencia de pago del servicio 3. NO MANDATORIO.
-	
-	
+
+
 	fc.add(FraudControlServicios.CSITPRODUCTCODE, "electronic_good"); //Código de producto. MANDATORIO. Valores posibles(adult_content;coupon;default;electronic_good;electronic_software;gift_certificate;handling_only;service;shipping_and_handling;shipping_only;subscription)
 	fc.add(FraudControlServicios.CSITPRODUCTDESCRIPTION, "PRD Description"); //Descripción del producto. MANDATORIO.
 	fc.add(FraudControlServicios.CSITPRODUCTNAME, "PRD Name"); //Nombre del producto. MANDATORIO.
@@ -379,9 +383,9 @@ Los siguientes parámetros se deben enviar específicamente para la vertical Dig
 
 ```java
 	FraudControlBienesDigitales fc = new FraudControlBienesDigitales();
-	
+
 	fc.add(FraudControlBienesDigitales.CSMDD31, "Email"); //Tipo de delivery. MANDATORIO. Valores posibles: WEB Session, Email, SmartPhone
-	
+
 	fc.add(FraudControlBienesDigitales.CSITPRODUCTCODE, "electronic_good"); //Código de producto. MANDATORIO. Valores posibles(adult_content;coupon;default;electronic_good;electronic_software;gift_certificate;handling_only;service;shipping_and_handling;shipping_only;subscription)
 	fc.add(FraudControlBienesDigitales.CSITPRODUCTDESCRIPTION, "PRD Description"); //Descripción del producto. MANDATORIO.
 	fc.add(FraudControlBienesDigitales.CSITPRODUCTNAME, "PRD Name"); //Nombre del producto. MANDATORIO.
@@ -406,7 +410,7 @@ Debe instanciarse un objeto de la clase `ComerciosAgregadores` con los parámetr
 
 ```java
 	ComerciosAgregadores c = new ComerciosAgregadores();
-	
+
 	c.add(ComerciosAgregadores.acodcanal, ""); //Código de canal. Alfanumérico de 3 caracteres.
 	c.add(ComerciosAgregadores.acodgeografico, ""); //Código geográfico del vendedor. Alfanumérico de 5 caracteres.
 	c.add(ComerciosAgregadores.acodpostal, "H3509XAP"); //Código postal. Alfanumérico de 8 caracteres.
@@ -418,7 +422,7 @@ Debe instanciarse un objeto de la clase `ComerciosAgregadores` con los parámetr
 	c.add(ComerciosAgregadores.anombrecom, "jorge/Rufalo"); //Nombre del comercio o nombre y apellido del vendedor. Alfanumérico 20 caracteres. en el caso de nombre y apellido debe estar separado por "/".
 	c.add(ComerciosAgregadores.anropuerta, "153"); //Número de puerta. Alfanumérico 6 caracteres
 	c.add(ComerciosAgregadores.arubro, ""); //Código de actividad (rubro). Alfanumérico de 5 caracteres.
-	
+
 ```
 
 Luego se debe incluir esta información en el objeto de datos
@@ -441,13 +445,13 @@ Debe instanciarse un objeto de la clase `MontoFijo` con los parámetros específ
 
 ```java
 	Split s = new MontoFijo();
-		
+
 	s.add(MontoFijo.cuotasdist, "01#06#24"); //cantidad de cuotas para cada subcomercio. Decimal de 2 dígitos.
 	s.add(MontoFijo.idmodalidad, "S"); // indica si la transacción es distribuida. (S= transacción distribuida; N y null = no distribida)
 	s.add(MontoFijo.impdist, "123.4#12#12.05"); //Importe de cada una de las substransacciones. Los importes deben postearse separados por "#".
 	s.add(MontoFijo.nrocomercio, "12345678"); //Número de comercio padre provisto por SPS DECIDIR. Alfanumérico de 8 caracteres.
 	s.add(MontoFijo.sitedist, "00100511#0234803245#00230031"); //Número de comercio de cada uno de los subcomercios asociados al comercio padre
-	
+
 ```
 
 Luego se debe incluir esta información en el objeto de datos
@@ -490,14 +494,14 @@ La operación GetAuthorizeAnswer que forma parte del servicio Authorize, debe ll
 		gaa.setAnswerKey("77215fe6-f9d5-f1c2-372b-c0065e0c4429"); // Mandatorio. Answer Key devuelta por la función callback del formulario de pago.
 		return gaa;
 	}
-	
+
 ```
 
 Luego se debe invocar al servicio pasándole como parámetro el objeto anteriormente creado
 
 ```java
 	GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData());
-		
+
 ```
 El mismo devolverá una instalcia de la clase `GetAuthorizeAnswerResponse`
 
@@ -530,7 +534,7 @@ Para realizar la anulación de una transacción, debe crearse una instancia de l
 ```java
 	ExecuteData ex = new ExecuteAnulacion("22067736" /*Mandatorio. Nro. de Comercio provisto por Decidir*/
 										, "123456" /*Mandatorio. Nro. de Operación*/
-										, SECURITY /*Mandatorio. Código provisto por Decidir*/ 
+										, SECURITY /*Mandatorio. Código provisto por Decidir*/
 										);
 ```
 
@@ -547,7 +551,7 @@ El mismo devolverá una instalcia de la clase `ExecuteResponse`
 	System.out.println("AuthorizationKey: " + exResponse.getAuthorizationKey()); // Authorization Key
 	System.out.println("EncodingMethod: " + exResponse.getEncodingMethod());
 	System.out.println("Payload: " + exResponse.getPayload()) // Mapa <clave, valor> con información adicional.
-	
+
 ```
 
 [Volver al inicio](#decidir-sdk-java)
@@ -576,7 +580,7 @@ El mismo devolverá una instalcia de la clase `Decidir\Authorize\Execute\Respons
 	System.out.println("AuthorizationKey: " + exResponse.getAuthorizationKey()); // Authorization Key
 	System.out.println("EncodingMethod: " + exResponse.getEncodingMethod());
 	System.out.println("Payload: " + exResponse.getPayload()) // Mapa <clave, valor> con información adicional.
-	
+
 ```
 
 [Volver al inicio](#decidir-sdk-java)
@@ -586,7 +590,7 @@ Para realizar la devolución parcial de una transacción, debe crearse una insta
 
 ```php
 	ExecuteData ex = new ExecuteDevolucion("22067736" /*Mandatorio. Nro. de Comercio provisto por Decidir*/
-										, "123456" /*Mandatorio. Nro. de Operación.*/ 
+										, "123456" /*Mandatorio. Nro. de Operación.*/
 										, "10.00" /*Mandatorio. Monto a devolver*/
 										, "RV82RVHO5T0O5CZUUTX2FLHU"/*Mandatorio. Código provisto por Decidir*/
 										);
@@ -606,7 +610,7 @@ El mismo devolverá una instalcia de la clase `Decidir\Authorize\Execute\Respons
 	System.out.println("AuthorizationKey: " + exResponse.getAuthorizationKey()); // Authorization Key
 	System.out.println("EncodingMethod: " + exResponse.getEncodingMethod());
 	System.out.println("Payload: " + exResponse.getPayload()) // Mapa <clave, valor> con información adicional.
-	
+
 ```
 
 [Volver al inicio](#decidir-sdk-java)
@@ -659,7 +663,7 @@ El mismo devolverá una instalcia de la clase `Operations`, que dentro tiene una
 			System.out.println("SEXOTITULAR" + aux.getSEXOTITULAR());
 			System.out.println("TIPODOC" + aux.getTIPODOC());
 			System.out.println("TITULAR" + aux.getTITULAR());
-			System.out.println("VALDOM" + aux.getVALDOM());	
+			System.out.println("VALDOM" + aux.getVALDOM());
 		}
 ```
 
@@ -704,38 +708,38 @@ El mismo devolverá una instalcia de la clase `Operations`, que dentro tiene una
 
 | IdEstado | Descripción |
 |----------|-------------|
-| 1 | Ingresada | 
-| 2 | A procesar | 
-| 3 | Procesada | 
-| 4 | Autorizada | 
-| 5 | Rechazada | 
-| 6 | Acreditada | 
-| 7 | Anulada | 
-| 8 | Anulación Confirmada | 
-| 9 | Devuelta | 
-| 10 | Devolución Confirmada | 
-| 11 | Pre autorizada | 
-| 12 | Vencida | 
-| 13 | Acreditación no cerrada | 
-| 14 | Autorizada * | 
-| 15 | A reversar | 
-| 16 | A registar en Visa | 
-| 17 | Validación iniciada en Visa | 
-| 18 | Enviada a validar en Visa | 
-| 19 | Validada OK en Visa | 
-| 20 | Recibido desde Visa | 
-| 21 | Validada no OK en Visa | 
-| 22 | Factura generada | 
-| 23 | Factura no generada | 
-| 24 | Rechazada no autenticada | 
-| 25 | Rechazada datos inválidos | 
-| 28 | A registrar en IdValidador | 
-| 29 | Enviada a IdValidador | 
-| 32 | Rechazada no validada | 
-| 38 | Timeout de compra | 
-| 50 | Ingresada Distribuida | 
-| 51 | Rechazada por grupo | 
-| 52 | Anulada por grupo | 
+| 1 | Ingresada |
+| 2 | A procesar |
+| 3 | Procesada |
+| 4 | Autorizada |
+| 5 | Rechazada |
+| 6 | Acreditada |
+| 7 | Anulada |
+| 8 | Anulación Confirmada |
+| 9 | Devuelta |
+| 10 | Devolución Confirmada |
+| 11 | Pre autorizada |
+| 12 | Vencida |
+| 13 | Acreditación no cerrada |
+| 14 | Autorizada * |
+| 15 | A reversar |
+| 16 | A registar en Visa |
+| 17 | Validación iniciada en Visa |
+| 18 | Enviada a validar en Visa |
+| 19 | Validada OK en Visa |
+| 20 | Recibido desde Visa |
+| 21 | Validada no OK en Visa |
+| 22 | Factura generada |
+| 23 | Factura no generada |
+| 24 | Rechazada no autenticada |
+| 25 | Rechazada datos inválidos |
+| 28 | A registrar en IdValidador |
+| 29 | Enviada a IdValidador |
+| 32 | Rechazada no validada |
+| 38 | Timeout de compra |
+| 50 | Ingresada Distribuida |
+| 51 | Rechazada por grupo |
+| 52 | Anulada por grupo |
 
 [Volver al inicio](#decidir-sdk-java)
 
@@ -743,29 +747,29 @@ El mismo devolverá una instalcia de la clase `Operations`, que dentro tiene una
 
 | Provincia | Código |
 |----------|-------------|
-| CABA | C | 
-| Buenos Aires | B | 
-| Catamarca | K | 
-| Chaco | H | 
-| Chubut | U | 
-| Córdoba | X | 
-| Corrientes | W | 
-| Entre Ríos | R | 
-| Formosa | P | 
-| Jujuy | Y | 
-| La Pampa | L | 
-| La Rioja | F | 
-| Mendoza | M | 
-| Misiones | N | 
-| Neuquén | Q | 
-| Río Negro | R | 
-| Salta | A | 
-| San Juan | J | 
-| San Luis | D | 
-| Santa Cruz | Z | 
-| Santa Fe | S | 
-| Santiago del Estero | G | 
-| Tierra del Fuego | V | 
+| CABA | C |
+| Buenos Aires | B |
+| Catamarca | K |
+| Chaco | H |
+| Chubut | U |
+| Córdoba | X |
+| Corrientes | W |
+| Entre Ríos | R |
+| Formosa | P |
+| Jujuy | Y |
+| La Pampa | L |
+| La Rioja | F |
+| Mendoza | M |
+| Misiones | N |
+| Neuquén | Q |
+| Río Negro | R |
+| Salta | A |
+| San Juan | J |
+| San Luis | D |
+| Santa Cruz | Z |
+| Santa Fe | S |
+| Santiago del Estero | G |
+| Tierra del Fuego | V |
 | Tucumán | T | 	
 
 [Volver al inicio](#decidir-sdk-java)
