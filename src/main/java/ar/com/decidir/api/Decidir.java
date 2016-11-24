@@ -1,6 +1,8 @@
 package ar.com.decidir.api;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -34,7 +36,7 @@ import ar.com.decidir.api.operation.service.Operations;
 
 public class Decidir {
 
-	public static final String version= "0.1.3";
+	public static final String version= "1.0.0";
 	
 	private AuthorizeConnector auth;
 	private OperationConnector op;
@@ -44,6 +46,8 @@ public class Decidir {
 	public static final int production = 0;
 	public static final int sandbox = 1;
 
+	private final String authorizeWSDL = "/decidir/Authorize.wsdl";
+	private final String operationWSDL = "/decidir/Operation.wsdl";
 
 	String endpoint;
 	
@@ -69,12 +73,37 @@ public class Decidir {
 			break;
 		}
 		this.headers = auth;
+		
+		//if(this.auth == null){
+		this.setAuthorize();
+		this.setOperation();
+		//}
 	}
 	
 	//Authorize Service
-	public void initAuthorize (String wsdl) throws MalformedURLException{
+	@Deprecated
+	public void initAuthorize (String wsdl) throws MalformedURLException{	
 		auth = new AuthorizeConnector(wsdl, this.endpoint+"Authorize", headers);
 	}
+	
+	@Deprecated
+	public void initAuthorize (URL wsdl) throws MalformedURLException{	
+		auth = new AuthorizeConnector(wsdl, this.endpoint+"Authorize", headers);
+	}
+	
+	private void setAuthorize (){
+		try {
+			URL wsdl = Decidir.class.getResource(this.authorizeWSDL).toURI().toURL();
+			auth = new AuthorizeConnector(wsdl, this.endpoint+"Authorize", headers);
+
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public SendAuthorizeRequestResponse sendAuthorizeRequest(SendAuthorizeRequestData sar){
 		return auth.sendAuthorizeRequest(sar);
 	}
@@ -86,13 +115,26 @@ public class Decidir {
 	}
 
 	//Operation Service
+	@Deprecated
 	public void initOperation(String wsdl) throws MalformedURLException{
 		op = new OperationConnector(wsdl, this.endpoint + "Operation", headers);
 	}
+	
+	private void setOperation(){
+		URL wsdl;
+		try {
+			wsdl = Decidir.class.getResource(this.operationWSDL).toURI().toURL();
+			op = new OperationConnector(wsdl, this.endpoint + "Operation", headers);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Operations get(GetData data) throws DataServiceFault{
 		return op.get(data);
 	}
-	
 	
 
 	//SSL INVALIDATION
@@ -132,21 +174,36 @@ public class Decidir {
 	}
 	public Map<String, Map<String,String>> getPayload(JAXBElement<String> element){
 		Map<String, Map<String, String>> result = new HashMap<>();
+		Map<String, String> resultChild = new HashMap<>();
+
 		if(element!=null){
 			 Object ele =  element.getValue();
 			 Node answer = ((Node) ele).getFirstChild();
 			 result.put("Answer", new HashMap<String, String>());
 			 NodeList results = answer.getChildNodes();
 			 for(int i=0; i<results.getLength();i++){
-				 result.get("Answer").put(results.item(i).getNodeName(), results.item(i).getTextContent());
+				 
+				if(results.item(i).getNodeName() != "TOKENIZATION"){
+					 result.get("Answer").put(results.item(i).getNodeName(), results.item(i).getTextContent());
+				}else{
+					 Node nodeToken = results.item(i);
+					 Node answerChild = (Node) nodeToken.getChildNodes();
+					 
+					 for (int j=0; j < ((NodeList) answerChild).getLength(); j++) {
+						 if(((NodeList) answerChild).item(j).getNodeName() != "#text"){
+							 resultChild.put(((NodeList) answerChild).item(j).getNodeName(), ((NodeList) answerChild).item(j).getTextContent());
+						 }
+					 }
+					 result.put("TOKENIZATION", resultChild);
+				}	
 			 }
+			 
 			 result.put("Request", new HashMap<String, String>());
 			 Node request = answer.getNextSibling();
 			 NodeList results2 = request.getChildNodes();
 			 for(int i=0; i<results2.getLength();i++){
 				 result.get("Request").put(results2.item(i).getNodeName(), results2.item(i).getTextContent());
 			 }
-			 System.out.println(element);
 		}
 		return result;
 	}

@@ -8,25 +8,23 @@ import ar.com.decidir.api.tools.fraudControl.FraudControlVertical;
 
 public class SendAuthorizeRequestData {
 
-	String security = "";
-	String session = "";
-	String monto = "";
-	String merchant = "";
-	String url_ok = "";
-	String url_error = "";
-	String encodingMethod = "";
-
-	FraudControlData data;
-	FraudControlVertical retail;
-
-	MedioPagoData medioDePago;
-
-	ComerciosAgregadores comercios;
-
-	Split split;
+	private String security = "";
+	private String session = "";
+	private String monto = "";
+	private String merchant = "";
+	private String url_ok = "";
+	private String url_error = "";
+	private String encodingMethod = "";
 	private String numeroOperacion;
 	private String numeroComercio;
+	private String emailCliente = "";
 
+	private FraudControlData data;
+	private FraudControlVertical retail;
+	private MedioPagoData medioDePago;
+	private ComerciosAgregadores comercios;	
+	private Split split;
+	
 	public String getMonto() {
 		return monto;
 	}
@@ -42,7 +40,7 @@ public class SendAuthorizeRequestData {
 	public void setSecurity(String security) {
 		this.security = security;
 	}
-
+	
 	public String getSession() {
 		return session;
 	}
@@ -83,6 +81,14 @@ public class SendAuthorizeRequestData {
 		this.encodingMethod = encodingMethod;
 	}
 
+	public String getEmailCliente() {
+		return emailCliente;
+	}
+
+	public void setEmailCliente(String emailCliente) {
+		this.emailCliente = emailCliente;
+	}
+
 	public String getPayload() {
 		String payload = "<Request>";
 		payload += "<NROCOMERCIO>" + getNumeroComercio() + "</NROCOMERCIO>";
@@ -91,6 +97,7 @@ public class SendAuthorizeRequestData {
 		payload += "<SESSION>" + getSession() + "</SESSION>";
 		payload += "<URL_OK>" + getUrl_ok() + "</URL_OK>";
 		payload += "<URL_ERROR>" + getUrl_error() + "</URL_ERROR>";
+		payload += "<EMAILCLIENTE>" + getEmailCliente() + "</EMAILCLIENTE>";
 		payload += "<ENCODINGMETHOD>" + getEncodingMethod()
 				+ "</ENCODINGMETHOD>";
 		payload += "<MONTO>" + getMonto() + "</MONTO>";
@@ -165,5 +172,4 @@ public class SendAuthorizeRequestData {
 	public void setNumeroOperacion(String numeroOperacion) {
 		this.numeroOperacion = numeroOperacion;
 	}
-
 }

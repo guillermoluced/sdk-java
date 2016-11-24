@@ -23,19 +23,24 @@ import ar.com.decidir.api.authorize.service.SendAuthorizeRequestResponse;
 public class AuthorizeConnector {
 
 	private ObjectFactory factory;
-	private String wsdl = null;
 	private String endpoint = null;
 	private AuthorizePortType service = null;
 
-	public AuthorizeConnector(String wsdl, String endpoint, Map<String, List<String>> auth) throws MalformedURLException {
+	public AuthorizeConnector(URL wsdl, String endpoint, Map<String, List<String>> auth){
 		this.factory = new ObjectFactory();
-		this.wsdl = wsdl;
 		this.endpoint = endpoint;
-		this.service = new Authorize(new URL(this.wsdl)).getAuthorizeHttpsSoap11Endpoint();
+		this.service = new Authorize(wsdl).getAuthorizeHttpsSoap11Endpoint();
 		((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpoint);
 		((BindingProvider) service).getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, auth);
 	}
-
+	
+	public AuthorizeConnector(String wsdl, String endpoint, Map<String, List<String>> auth) throws MalformedURLException {
+		this.factory = new ObjectFactory();
+		this.endpoint = endpoint;
+		this.service = new Authorize(new URL(wsdl)).getAuthorizeHttpsSoap11Endpoint();
+		((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpoint);
+		((BindingProvider) service).getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, auth);
+	}
 
 	//Send Authorize Request
 	public SendAuthorizeRequestResponse sendAuthorizeRequest(SendAuthorizeRequestData sar){
@@ -93,6 +98,6 @@ public class AuthorizeConnector {
 		o.setSecurity(ex.getSecurity());
 		o.setSession(factory.createExecuteSession(ex.getSession()));
 		o.setPayload(factory.createExecutePayload(ex.getPayload()));
-		return null;
+		return o;
 	}
 }

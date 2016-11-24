@@ -9,7 +9,9 @@ import java.util.Map;
 import ar.com.decidir.api.Decidir;
 import ar.com.decidir.api.authorize.GetAuthorizeAnswerData;
 import ar.com.decidir.api.authorize.SendAuthorizeRequestData;
+import ar.com.decidir.api.authorize.bsa.BsaData;
 import ar.com.decidir.api.authorize.execute.ExecuteAnulacion;
+import ar.com.decidir.api.authorize.execute.ExecuteBSA;
 import ar.com.decidir.api.authorize.execute.ExecuteData;
 import ar.com.decidir.api.authorize.medioPago.MedioPagoData;
 import ar.com.decidir.api.authorize.medioPago.TarjetaCredito;
@@ -25,16 +27,16 @@ public class Test {
 	//REEMPLAZAR POR EL ANSWER QUE DEVUELVE EL FORMULARIO
 	private static final String ANSWER_KEY = "aaaaa-aaaaa-aaaaa-aaaa";
 
-
 	static Decidir decidir;
 	
-	static final String MONTO = "205";
+	static final String MONTO = "205.00";
 	static String CURRENCYCODE = "032";
-	static String MERCHANT = "00110516";
+	static String MERCHANT = "12345678";
 	static String ENCODINGMETHOD = "XML";
-	static String SECURITY = "Z5ZV9INFL55IYGF6K6YMLJKJ";
-	static String NRO_OPERACION = "001";
+	static String SECURITY = "FUQO85BGGNST99Z9WBPFTXKD";
+	static String NRO_OPERACION = "000000";
 	static String NUMERO_COMERCIO = "";
+	static String EMAIL_CLIENTE = "test@test.com";
 	
 	public static void main(String[] args){
 		
@@ -48,8 +50,7 @@ public class Test {
 		operationSample();
 		
 	}
-	
-	
+
 	//HttpHeaders
 	private static Map<String, List<String>> getHeaders() {
 		Map<String, List<String>> parameters = new HashMap<String, List<String>>();
@@ -58,29 +59,22 @@ public class Test {
 		//include all aditional Http headers to map, all of them will be used
 		return parameters;
 	}
-	
-	
-	
+		
 	private static void authorizeSample() {
-		try {
-			decidir.initAuthorize("file:"+System.getProperty("user.dir")+"/resources/Authorize.wsdl");
-			
-			//SendAuthorizeRequest
-			SendAuthorizeRequestResponse sarResponse = decidir.sendAuthorizeRequest(initSendAuthorizeRequestData());
-			printSendAuthorizeRequestResponse(sarResponse);
-			
-			//GetAuthorizeAnswer
-			GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData("595664a7-3341-78e1-fc66-f7ce90f77c0c"));
-			printGetAuthorizeAnswerResponse(gaaResponse);
-			
-			//Execute
-			ExecuteResponse exResponse = decidir.execute(initExecuteData());
-			printExecuteResponse(exResponse);
-			
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//decidir.initAuthorize("file:"+System.getProperty("user.dir")+"/resources/Authorize.wsdl");
+
+		//SendAuthorizeRequest
+		SendAuthorizeRequestResponse sarResponse = decidir.sendAuthorizeRequest(initSendAuthorizeRequestData());
+		printSendAuthorizeRequestResponse(sarResponse);
+
+
+		//GetAuthorizeAnswer
+		GetAuthorizeAnswerResponse gaaResponse = decidir.getAuthorizeAnswer(initGetAuthorizeAnswerData("595664a7-3341-78e1-fc66-f7ce90f77c0c"));
+		printGetAuthorizeAnswerResponse(gaaResponse);
+
+		//Execute
+		ExecuteResponse exResponse = decidir.execute(initExecuteData());
+		printExecuteResponse(exResponse);
 	}
 
 
@@ -96,10 +90,13 @@ public class Test {
 		sar.setMonto(MONTO);
 		sar.setUrl_error("http://someurl.com/error/");
 		sar.setUrl_ok("http://someurl.com/ok/");
+		sar.setEmailCliente(EMAIL_CLIENTE);
+
 		sar.setNumeroComercio(NUMERO_COMERCIO);
+		sar.setEmailCliente(EMAIL_CLIENTE);
 		
-		MedioPagoData medioDePago = new TarjetaCredito("1", "6");
-		
+		MedioPagoData medioDePago = new TarjetaCredito("1", "6", true);
+
 		sar.setMedioPago(medioDePago);
 
 		return sar;
@@ -138,38 +135,69 @@ public class Test {
 		Map<String, Map<String, String>> payload =  decidir.getPayload(gaaResponse.getPayload());
 		for (Map.Entry<String, Map<String, String>> ele1 : payload.entrySet()) {
 			System.out.println(ele1.getKey() + ": ");
-			for(Map.Entry<String, String> value: ele1.getValue().entrySet()){
-				System.out.println(value.getKey() + ": " + value.getValue());
+			for(Map.Entry<String, String> value : ele1.getValue().entrySet()){
+				System.out.println(" ->"+ value.getKey() + ": " + value.getValue());
 			}
 		}
 	}
 	
 	private static ExecuteData initExecuteData() {
-		ExecuteData ex = new ExecuteAnulacion(MERCHANT, "123456", SECURITY);//Anulacion
-		//ExecuteData ex = new ExecuteDevolucion(MERCHANT, "123456", "10.00", SECURITY);//Devolucion Parcial
-		//ExecuteData ex = new ExecuteDevolucion(MERCHANT, "123456", SECURITY);//Devolucion Total
 		
+		String op = "test10";		
+		ExecuteData ex = new ExecuteBSA(MERCHANT, op, SECURITY);		
+		BsaData bsaData = new BsaData();
+
+		//EXECUTE NORMAL
+		bsaData.putValue(bsaData.NROCOMERCIO, MERCHANT);
+		bsaData.putValue(bsaData.NROOPERACION, op);
+		bsaData.putValue(bsaData.MONTO, "10");
+		bsaData.putValue(bsaData.CUOTAS, "01");
+		bsaData.putValue(bsaData.MONEDA, "032");
+		bsaData.putValue(bsaData.MEDIODEPAGO, "1");
+		bsaData.putValue(bsaData.EMAILCLIENTE, "pepe@pepe.com");	
+		bsaData.putValue(bsaData.NOMBREENTARJETA, "HELP DESK");
+		bsaData.putValue(bsaData.NROTARJETA, "4507990000004905");
+		bsaData.putValue(bsaData.VENCIMIENTO, "1808");
+		bsaData.putValue(bsaData.CODSEGURIDAD, "775");
+			
+		//CAMPOS EXTRAS BSA
+		bsaData.putValue(bsaData.DIRECCION_IP, "127.0.1");
+		bsaData.putValue(bsaData.PUBLIC_TOKEN, " ");
+		bsaData.putValue(bsaData.ISSUE_DATE, "20160310");
+		bsaData.putValue(bsaData.PUBLIC_REQUEST_KEY, " ");
+		bsaData.putValue(bsaData.VOLATILE_ENCRYPTED_DATA, " ");
+		bsaData.putValue(bsaData.FLAG_TOKENIZACION, " ");		
+		bsaData.putValue(bsaData.FLAG_CODIGO_SEGURIDAD, " ");
+		bsaData.putValue(bsaData.FLAG_SELECTOR_CLAVE, " ");
+		bsaData.putValue(bsaData.FLAG_PEI, "0");
+		
+		ex.setBsaData(bsaData);
+	
 		return ex;
 	}
 	private static void printExecuteResponse(ExecuteResponse exResponse) {
 		System.out.println("Status Code: " + exResponse.getStatusCode());
-		System.out.println("StatusMessage: " + exResponse.getStatusMessage());
-		System.out.println("AuthorizationKey: " + exResponse.getAuthorizationKey());
-		System.out.println("EncodingMethod: " + exResponse.getEncodingMethod());
-		System.out.println("Payload: " + exResponse.getPayload());		
+		System.out.println("StatusMessage: " + exResponse.getStatusMessage().getValue());
+		System.out.println("AuthorizationKey: " + exResponse.getAuthorizationKey().getValue());
+		System.out.println("EncodingMethod: " + exResponse.getEncodingMethod().getValue());
+		System.out.println("Payload: ");
+		Map<String, Map<String, String>> payload =  decidir.getPayload(exResponse.getPayload());
+		for (Map.Entry<String, Map<String, String>> ele1 : payload.entrySet()) {
+			System.out.println(ele1.getKey() + ": ");
+			for(Map.Entry<String, String> value: ele1.getValue().entrySet()){
+				System.out.println(value.getKey() + ": " + value.getValue());
+			}
+		}		
 	}
-	
 	
 	
 	private static void operationSample() {
 		try {
-			decidir.initOperation("file:D:/Operation.wsdl");
-			
+						
+			//decidir.initOperation("file:D:/Operation.wsdl");			
 			Operations ops = decidir.get(initGetData());
 			printOperations(ops);
 			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
 		} catch (DataServiceFault e) {
 			e.printStackTrace();
 		}

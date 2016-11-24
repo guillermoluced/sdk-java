@@ -4,7 +4,7 @@
 	<groupId>com.ar.decidir</groupId>
 	<artifactId>sdk-java-decidir</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1</version>
+	<version>1.0.0</version>
 	<name>sdk-java-decidir</name>
 	<properties>
 		<jdk.version>1.7</jdk.version>
@@ -69,5 +69,10 @@
 			</plugin>
 
 		</plugins>
+	    <resources>
+	     <resource>
+	       <directory>src/main/resources</directory>
+	     </resource>
+	    </resources>
 	</build>
 </project>

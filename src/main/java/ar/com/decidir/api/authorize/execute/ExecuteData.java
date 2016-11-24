@@ -3,6 +3,9 @@ package ar.com.decidir.api.authorize.execute;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.decidir.api.authorize.medioPago.MedioPagoData;
+import ar.com.decidir.api.authorize.bsa.BsaData;
+
 
 public abstract class ExecuteData {
 
@@ -13,9 +16,12 @@ public abstract class ExecuteData {
 	
 	protected String Operation = "";
 	
+	protected MedioPagoData medioDePago;
+	
+	protected BsaData BsaData;
+	
+	
 	protected Map<String, String> data = new HashMap<String, String>();
-	
-	
 	
 	public String getEncodingMethod() {
 		return EncodingMethod;
@@ -51,8 +57,19 @@ public abstract class ExecuteData {
 	public void setSession(String session) {
 		Session = session;
 	}
-
 	
+	public MedioPagoData getMedioDePago() {
+		return medioDePago;
+	}
+	public void setMedioDePago(MedioPagoData medioDePago) {
+		this.medioDePago = medioDePago;
+	}
+	public BsaData getBsaData() {
+		return BsaData;
+	}
+	public void setBsaData(BsaData bsaData) {
+		BsaData = bsaData;
+	}
 	public String getPayload() {
 		String payload = "<Request>";
 		
@@ -66,6 +83,14 @@ public abstract class ExecuteData {
 			payload += "</";
 			payload += entry.getKey().toUpperCase();
 			payload += ">";
+		}
+		
+		if (medioDePago != null) {
+			payload += medioDePago.getPayload();
+		}
+		
+		if (BsaData != null) {
+			payload += BsaData.getPayload();
 		}
 		
 		payload+="</Request>";

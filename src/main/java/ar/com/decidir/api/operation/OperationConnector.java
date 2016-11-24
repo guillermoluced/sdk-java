@@ -18,16 +18,23 @@ import ar.com.decidir.api.operation.service.Operations;
 
 public class OperationConnector {
 
-	private String wsdl;
+
 	private String endpoint;
 	private OperationPortType service;
 	private ObjectFactory factory;
 
 	public OperationConnector(String wsdl, String endpoint, Map<String, List<String>> auth) throws MalformedURLException {
 		this.factory = new ObjectFactory();
-		this.wsdl = wsdl;
 		this.endpoint = endpoint;
-		this.service = new Operation_Service(new URL(this.wsdl)).getOperationHttpsSoap11Endpoint();
+		this.service = new Operation_Service(new URL(wsdl)).getOperationHttpsSoap11Endpoint();
+		((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpoint);
+		((BindingProvider) service).getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, auth);
+	}
+	
+	public OperationConnector(URL wsdl, String endpoint, Map<String, List<String>> auth){
+		this.factory = new ObjectFactory();
+		this.endpoint = endpoint;
+		this.service = new Operation_Service(wsdl).getOperationHttpsSoap11Endpoint();
 		((BindingProvider) service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.endpoint);
 		((BindingProvider) service).getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, auth);
 	}

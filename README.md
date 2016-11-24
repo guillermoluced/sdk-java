@@ -132,7 +132,10 @@ Para utilizar tarjetas de crédito como medio de pago, se debe instanciar un obj
 	MedioPagoData medioDePago = new TarjetaCredito("1"/* Mandatorio. Código del tipo de tarjeta a utilizar. [Tabla Medios de Pago] (#tablas-medios-de-pago)*/
 													, "6"/*Mandatorio. Nro. de cuotas en los que se hará la operacion*/
 													, "450799");/*Opcional. Código BIN que identifica al emisor de la tarjeta de crédito. Permite al comercio operar con promociones bancarias.*/
-
+	MedioPagoData medioDePago = new TarjetaCredito("1"/* Mandatorio. Código del tipo de tarjeta a utilizar. [Tabla Medios de Pago] (#tablas-medios-de-pago)*/
+													, "6"/*Mandatorio. Nro. de cuotas en los que se hará la operacion*/
+													, true/*Opcional, indica si se desea tokenizar*/);
+													
 ```
 
 Luego se debe incluir la información del medio de pago en el objeto de datos
