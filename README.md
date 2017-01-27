@@ -621,13 +621,10 @@ El mismo devolverá una instalcia de la clase `Decidir\Authorize\Execute\Respons
 ## GetByOperationId
 
 La operación GetByOperationId que forma parte del servicio Operation, permite consultar el último estado de una transacción de forma online, debe llamarse de la siguiente manera:
-Primero se debe inicializar el conector pasando como parametro la ubicación del WSDL(incluida en la SDK)
+
+Se debe instanciar la clase GetData con el MERCHANT y NROOPERACION de la siguiente manera:
 ```java
-	decidir.initOperation("file:D:/Operation.wsdl");
-```
-Luego se debe instanciar la clase GetData de la siguiente manera:
-```java
-	GetData data = new GetData(MERCHANT, "123456");
+	GetData data = new GetData("00130817", "hd_soap_300716_02");
 ```
 
 Luego se debe invocar al servicio pasándole como parámetro el objeto anteriormente creado
@@ -635,38 +632,38 @@ Luego se debe invocar al servicio pasándole como parámetro el objeto anteriorm
 ```java
 	Operations ops = decidir.get(data);
 ```
-El mismo devolverá una instalcia de la clase `Operations`, que dentro tiene una List<Operation>
+El mismo devolverá una instancia de la clase `Operations`, que dentro tiene una List<Operation>
 
 ```java
 		List<Operation> o = ops.getOperation();
 		for(int i=0; i<o.size();i++){
 			Operation aux = o.get(i);
-			System.out.println("CALLE" + aux.getCALLE());
-			System.out.println("CODAUT" + aux.getCODAUT());
-			System.out.println("CUOTAS" + aux.getCUOTAS());
-			System.out.println("ESTADODESCRI" + aux.getESTADODESCRI());
-			System.out.println("FECHAORIGINAL" + aux.getFECHAORIGINAL());
-			System.out.println("FECHAVTOCUOTA1" + aux.getFECHAVTOCUOTA1());
-			System.out.println("IDESTADO" + aux.getIDESTADO());
-			System.out.println("IDMEDIOPAGO" + aux.getIDMEDIOPAGO());
-			System.out.println("IDMOTIVO" + aux.getIDMOTIVO());
-			System.out.println("IDSITE" + aux.getIDSITE());
-			System.out.println("IDTIPODOC" + aux.getIDTIPODOC());
-			System.out.println("IDTRANSACCIONSITE" + aux.getIDTRANSACCIONSITE());
-			System.out.println("MAIL" + aux.getMAIL());
-			System.out.println("MEDIOPAGODESCRI" + aux.getMEDIOPAGODESCRI());
-			System.out.println("MONTO" + aux.getMONTO());
-			System.out.println("MOTIVO" + aux.getMOTIVO());
-			System.out.println("MOTIVOADICIONAL" + aux.getMOTIVOADICIONAL());
-			System.out.println("NRODOC" + aux.getNRODOC());
-			System.out.println("NROPUERTA" + aux.getNROPUERTA());
-			System.out.println("NROTARJ4" + aux.getNROTARJ4());
-			System.out.println("NROTICKET" + aux.getNROTICKET());
-			System.out.println("PARAMSITIO" + aux.getPARAMSITIO());
+			System.out.println("CALLE: " + aux.getCALLE());
+			System.out.println("CODAUT: " + aux.getCODAUT());
+			System.out.println("CUOTAS: " + aux.getCUOTAS());
+			System.out.println("ESTADODESCRI: " + aux.getESTADODESCRI());
+			System.out.println("FECHAORIGINAL: " + aux.getFECHAORIGINAL());
+			System.out.println("FECHAVTOCUOTA1: " + aux.getFECHAVTOCUOTA1());
+			System.out.println("IDESTADO: " + aux.getIDESTADO());
+			System.out.println("IDMEDIOPAGO: " + aux.getIDMEDIOPAGO());
+			System.out.println("IDMOTIVO: " + aux.getIDMOTIVO());
+			System.out.println("IDSITE: " + aux.getIDSITE());
+			System.out.println("IDTIPODOC: " + aux.getIDTIPODOC());
+			System.out.println("IDTRANSACCIONSITE: " + aux.getIDTRANSACCIONSITE());
+			System.out.println("MAIL: " + aux.getMAIL());
+			System.out.println("MEDIOPAGODESCRI: " + aux.getMEDIOPAGODESCRI());
+			System.out.println("MONTO: " + aux.getMONTO());
+			System.out.println("MOTIVO: " + aux.getMOTIVO());
+			System.out.println("MOTIVOADICIONAL: " + aux.getMOTIVOADICIONAL());
+			System.out.println("NRODOC: " + aux.getNRODOC());
+			System.out.println("NROPUERTA: " + aux.getNROPUERTA());
+			System.out.println("NROTARJ4: " + aux.getNROTARJ4());
+			System.out.println("NROTICKET: " + aux.getNROTICKET());
+			System.out.println("PARAMSITIO: " + aux.getPARAMSITIO());
 			System.out.println("SEXOTITULAR" + aux.getSEXOTITULAR());
-			System.out.println("TIPODOC" + aux.getTIPODOC());
-			System.out.println("TITULAR" + aux.getTITULAR());
-			System.out.println("VALDOM" + aux.getVALDOM());
+			System.out.println("TIPODOC: " + aux.getTIPODOC());
+			System.out.println("TITULAR: " + aux.getTITULAR());
+			System.out.println("VALDOM: " + aux.getVALDOM());
 		}
 ```
 

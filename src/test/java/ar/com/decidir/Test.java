@@ -29,11 +29,11 @@ public class Test {
 
 	static Decidir decidir;
 	
-	static final String MONTO = "205.00";
+	static final String MONTO = "4";
 	static String CURRENCYCODE = "032";
-	static String MERCHANT = "12345678";
+	static String MERCHANT = "00133317";
 	static String ENCODINGMETHOD = "XML";
-	static String SECURITY = "FUQO85BGGNST99Z9WBPFTXKD";
+	static String SECURITY = "JVWQ40SFJVU0K7WN4AH6QNFF";
 	static String NRO_OPERACION = "000000";
 	static String NUMERO_COMERCIO = "";
 	static String EMAIL_CLIENTE = "test@test.com";
@@ -193,8 +193,7 @@ public class Test {
 	
 	private static void operationSample() {
 		try {
-						
-			//decidir.initOperation("file:D:/Operation.wsdl");			
+								
 			Operations ops = decidir.get(initGetData());
 			printOperations(ops);
 			
@@ -205,7 +204,8 @@ public class Test {
 
 
 	private static GetData initGetData() {
-		GetData data = new GetData(MERCHANT, "123456");
+		GetData data = new GetData("00133317", "hd_soap_300716_02");
+
 		return data;
 	}
 
@@ -214,32 +214,32 @@ public class Test {
 		List<Operation> o = ops.getOperation();
 		for(int i=0; i<o.size();i++){
 			Operation aux = o.get(i);
-			System.out.println("CALLE" + aux.getCALLE());
-			System.out.println("CODAUT" + aux.getCODAUT());
-			System.out.println("CUOTAS" + aux.getCUOTAS());
-			System.out.println("ESTADODESCRI" + aux.getESTADODESCRI());
-			System.out.println("FECHAORIGINAL" + aux.getFECHAORIGINAL());
-			System.out.println("FECHAVTOCUOTA1" + aux.getFECHAVTOCUOTA1());
-			System.out.println("IDESTADO" + aux.getIDESTADO());
-			System.out.println("IDMEDIOPAGO" + aux.getIDMEDIOPAGO());
-			System.out.println("IDMOTIVO" + aux.getIDMOTIVO());
-			System.out.println("IDSITE" + aux.getIDSITE());
-			System.out.println("IDTIPODOC" + aux.getIDTIPODOC());
-			System.out.println("IDTRANSACCIONSITE" + aux.getIDTRANSACCIONSITE());
-			System.out.println("MAIL" + aux.getMAIL());
-			System.out.println("MEDIOPAGODESCRI" + aux.getMEDIOPAGODESCRI());
-			System.out.println("MONTO" + aux.getMONTO());
-			System.out.println("MOTIVO" + aux.getMOTIVO());
-			System.out.println("MOTIVOADICIONAL" + aux.getMOTIVOADICIONAL());
-			System.out.println("NRODOC" + aux.getNRODOC());
-			System.out.println("NROPUERTA" + aux.getNROPUERTA());
-			System.out.println("NROTARJ4" + aux.getNROTARJ4());
-			System.out.println("NROTICKET" + aux.getNROTICKET());
-			System.out.println("PARAMSITIO" + aux.getPARAMSITIO());
-			System.out.println("SEXOTITULAR" + aux.getSEXOTITULAR());
-			System.out.println("TIPODOC" + aux.getTIPODOC());
-			System.out.println("TITULAR" + aux.getTITULAR());
-			System.out.println("VALDOM" + aux.getVALDOM());	
+			System.out.println("CALLE: " + aux.getCALLE());
+			System.out.println("CODAUT: " + aux.getCODAUT());
+			System.out.println("CUOTAS: " + aux.getCUOTAS());
+			System.out.println("ESTADODESCRI: " + aux.getESTADODESCRI());
+			System.out.println("FECHAORIGINAL: " + aux.getFECHAORIGINAL());
+			System.out.println("FECHAVTOCUOTA1: " + aux.getFECHAVTOCUOTA1());
+			System.out.println("IDESTADO: " + aux.getIDESTADO());
+			System.out.println("IDMEDIOPAGO: " + aux.getIDMEDIOPAGO());
+			System.out.println("IDMOTIVO: " + aux.getIDMOTIVO());
+			System.out.println("IDSITE: " + aux.getIDSITE());
+			System.out.println("IDTIPODOC :" + aux.getIDTIPODOC());
+			System.out.println("IDTRANSACCIONSITE: " + aux.getIDTRANSACCIONSITE());
+			System.out.println("MAIL: " + aux.getMAIL());
+			System.out.println("MEDIOPAGODESCRI: " + aux.getMEDIOPAGODESCRI());
+			System.out.println("MONTO: " + aux.getMONTO());
+			System.out.println("MOTIVO: " + aux.getMOTIVO());
+			System.out.println("MOTIVOADICIONAL: " + aux.getMOTIVOADICIONAL());
+			System.out.println("NRODOC: " + aux.getNRODOC());
+			System.out.println("NROPUERTA: " + aux.getNROPUERTA());
+			System.out.println("NROTARJ4: " + aux.getNROTARJ4());
+			System.out.println("NROTICKET: " + aux.getNROTICKET());
+			System.out.println("PARAMSITIO: " + aux.getPARAMSITIO());
+			System.out.println("SEXOTITULAR: " + aux.getSEXOTITULAR());
+			System.out.println("TIPODOC: " + aux.getTIPODOC());
+			System.out.println("TITULAR: " + aux.getTITULAR());
+			System.out.println("VALDOM: " + aux.getVALDOM());	
 		}
 		
 	}
