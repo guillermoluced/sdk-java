@@ -52,7 +52,7 @@ Se encuentra disponible en Gitbook el **[Manual de Integración Decidir] (https:
 
 Instanciación de la clase 'Decidir'
 La misma recibe como parámetros el Header HTTP provisto por Decidir para el comercio y un numero entero que representa el Endpoint en el que se realizaran las operaciones.
-
+ 
 ```java
 
 		int endpoint = Decidir.sandbox;//Developer sandbox
